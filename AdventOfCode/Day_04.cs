@@ -28,7 +28,7 @@ namespace AdventOfCode
 
         public override ValueTask<string> Solve_2()
         {
-            return ValueTask.FromResult(Part2().ToString());
+            return ValueTask.FromResult(Part2(_numbersCalled, _BingoBoards).ToString());
         }
 
         public static int? Part1(int[] input, List<int?[,]> boards)
@@ -46,12 +46,29 @@ namespace AdventOfCode
                     }
                 }                                    
             }
-           
-            return 1;
+            return null;
         }
-        public static int Part2()
+        public static int? Part2(int[] input, List<int?[,]> boards)
         {
-            return 0;
+            List<int?[,]> winners = new();
+            List<int> winnerInput = new();
+            
+            for (int i = 0; i < input.Length; i++)
+            {
+                for (var currentBoard = 0; currentBoard < boards.Count; currentBoard++)
+                {
+                    boards[currentBoard] = CheckNumber(boards[currentBoard], input[i]);
+                    if (CheckBingo(boards[currentBoard]))
+                    {
+                        winners.Add(boards[currentBoard]);
+                        winnerInput.Add(input[i]);
+                        boards.RemoveAt(currentBoard);
+                        currentBoard--;
+                    }
+                }
+            }
+
+            return SumOfBoard(winners.Last()) * winnerInput.Last();
         }
 
         public static int?[,] MakeBoard(List<string> list)
@@ -94,13 +111,49 @@ namespace AdventOfCode
         }
         public static bool CheckBingo(int?[,] board)
         {
-            if (CheckHorizontal(board))
+            if (CheckHorizontal(board) || CheckVertical(board))
                 return true;
-            else if (CheckVertical(board))
-                return true;
-            else 
+            else
                 return false;
         }
+
+        //public static bool CheckBingo(int?[,] board)
+        //{
+        //    for (int b = 0; b <=1; b++)
+        //    {
+        //        for (int i = 0; i < 5; i++)
+        //        {
+        //            for (int j = 0; j < 5; j++)
+        //            {
+        //                if (b == 0)
+        //                {
+        //                    if (board[i, j] == null)
+        //                    {
+        //                        if (j == 4)
+        //                        {
+        //                            return true;
+        //                        }
+        //                    }
+        //                    else
+        //                        return false;
+        //                }
+        //                else
+        //                {
+        //                    if (board[j, i] == null)
+        //                    {
+        //                        if (j == 4)
+        //                        {
+        //                            return true;
+        //                        }
+        //                    }
+        //                    else
+        //                        return false;
+        //                }
+        //            }
+        //        }                
+        //    }
+        //    return false;
+        //}
 
         private static bool CheckHorizontal(int?[,] board)
         {
@@ -116,13 +169,14 @@ namespace AdventOfCode
                         }
                     }
                     else
-                        return false;
+                        break;
                 }
             }
             return false;
         }
 
-        private static bool CheckVertical(int?[,] board)
+
+        public static bool CheckVertical(int?[,] board)
         {
             for (int i = 0; i < 5; i++)
             {
@@ -136,7 +190,7 @@ namespace AdventOfCode
                         }
                     }
                     else
-                        return false;
+                        break;
                 }
             }
             return false;
@@ -151,7 +205,7 @@ namespace AdventOfCode
                     if (board[i, j] == number)
                     {
                         board[i,j] = null;
-                        //return board;
+                        return board;
                     }
                 }
             }
