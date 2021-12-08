@@ -12,11 +12,7 @@ namespace AoCTests
 {
     public class Day4Tests
     {
-        private readonly string[] inputs;
-        public Day4Tests()
-        {
-            inputs = File.ReadAllLines(@"Inputs\04InputTest.txt");
-        }
+        
         [Fact]
         public void Part1()
         {
