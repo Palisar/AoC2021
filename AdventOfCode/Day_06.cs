@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace AdventOfCode
 {
@@ -35,70 +36,95 @@ namespace AdventOfCode
             {
                 for (int i = 0; i < school.Count; i++)
                 {
-                    if (school[i].daysToSpawn == 0)
+                    if (school[i].DaysToSpawn == 0)
                     {
                         school.Add(new Lanternfish());
                     }
                     school[i].Countdown();
                 }
             }
-            
+
             return school.Count;
         }
-
+        
         public static long Part2(int[] inputs)
         {
-            SortedDictionary<int, long> largeSchool = PopulateList2(inputs);
-            for (int i = 0; i < 32; i++)
+            SortedDictionary<int, long> school = PopulateList2(inputs);
+            var day = 0;
+
+            for (var i = 0; i < 256; i++)
             {
-                largeSchool[8] += largeSchool[0];
-                largeSchool[6] += largeSchool[0];
-                largeSchool[0] = 0;
-
-                largeSchool[0] += largeSchool[1];
-                largeSchool[7] += largeSchool[1];
-                largeSchool[1] = 0;
-
-                largeSchool[1] += largeSchool[2];
-                largeSchool[8] += largeSchool[2];
-                largeSchool[2] = 0;
-
-                largeSchool[2] += largeSchool[3];
-                largeSchool[0] += largeSchool[3];
-                largeSchool[3] = 0;
-
-                largeSchool[3] += largeSchool[4];
-                largeSchool[1] += largeSchool[4];
-                largeSchool[4] = 0;
-
-                largeSchool[4] += largeSchool[5];
-                largeSchool[2] += largeSchool[5];
-                largeSchool[5] = 0;
-
-                largeSchool[5] += largeSchool[6];
-                largeSchool[3] += largeSchool[6];
-                largeSchool[6] = 0;
-
-                largeSchool[6] += largeSchool[7];
-                largeSchool[4] += largeSchool[7];
-                largeSchool[7] = 0;
-
-                largeSchool[7] += largeSchool[8];
-                largeSchool[5] += largeSchool[8];
-                largeSchool[8] = 0;
-
+                school = NextDay(school, day);
+                
+                day++;
+                if (day == 9)
+                    day = 0;
             }
-            var result = largeSchool.Sum(x => x.Value);
-            
+            long result = school.Sum(x => x.Value);
             return result;
         }
 
+        public static SortedDictionary<int, long> NextDay(SortedDictionary<int, long> currentDay, int dayOfWeek)
+        {
+            var nextDay = new SortedDictionary<int, long>(currentDay);
+            switch (dayOfWeek)
+            {
+                case 0:
+                    nextDay[8] += nextDay[dayOfWeek];
+                    nextDay[6] += nextDay[dayOfWeek];
+                    nextDay[0] = 0;
+                    break;
+                case 1:
+                    nextDay[0] += nextDay[dayOfWeek];
+                    nextDay[7] += nextDay[dayOfWeek];
+                    nextDay[1] = 0;
+                    break;
+                case 2:
+                    nextDay[1] += nextDay[dayOfWeek];
+                    nextDay[8] += nextDay[dayOfWeek];
+                    nextDay[2] = 0;
+                    break;
+                case 3:
+                    nextDay[2] += nextDay[dayOfWeek];
+                    nextDay[0] += nextDay[dayOfWeek];
+                    nextDay[3] = 0;
+                    break;
+                case 4:
+                    nextDay[3] += nextDay[dayOfWeek];
+                    nextDay[1] += nextDay[dayOfWeek];
+                    nextDay[4] = 0;
+                    break;
+                case 5:
+                    nextDay[4] += nextDay[dayOfWeek];
+                    nextDay[2] += nextDay[dayOfWeek];
+                    nextDay[5] = 0;
+                    break;
+                case 6:
+                    nextDay[5] += nextDay[dayOfWeek];
+                    nextDay[3] += nextDay[dayOfWeek];
+                    nextDay[6] = 0;
+                    break;
+                case 7:
+                    nextDay[6] += nextDay[dayOfWeek];
+                    nextDay[4] += nextDay[dayOfWeek];
+                    nextDay[7] = 0;
+                    break;
+                case 8:
+                    nextDay[7] += nextDay[dayOfWeek];
+                    nextDay[5] += nextDay[dayOfWeek];
+                    nextDay[8] = 0;
+                    break;
+            }
+            return nextDay;
+        }
+
+            
         public static List<Lanternfish> PopulateList(int[] inputs)
         {
             List<Lanternfish> school = new();
             for (int i = 0;i < inputs.Length; i++)
             {
-                school.Add(new Lanternfish { daysToSpawn = inputs[i] });
+                school.Add(new Lanternfish { DaysToSpawn = inputs[i] });
             }
             return school;
         }
@@ -114,7 +140,8 @@ namespace AdventOfCode
                 {5,0 },
                 {6,0 },
                 {7,0 },
-                {8,0 }
+                {8,0 },
+
             };
             foreach (var item in inputs)
             {               
@@ -122,20 +149,18 @@ namespace AdventOfCode
             }
             return school;
         }
-
     }
     public class Lanternfish
     {
-        public int daysToSpawn { get; set; } = 9;
+        public int DaysToSpawn { get; set; } = 9;
         public void Countdown()
         {
-            if (daysToSpawn == 0)
+            if (DaysToSpawn == 0)
             {
-                daysToSpawn = 6;
+                DaysToSpawn = 6;
             }
             else
-                daysToSpawn--;
+                DaysToSpawn--;
         }
-        
     }
 }
