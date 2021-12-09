@@ -175,7 +175,6 @@ namespace AdventOfCode
             return false;
         }
 
-
         public static bool CheckVertical(int?[,] board)
         {
             for (int i = 0; i < 5; i++)
