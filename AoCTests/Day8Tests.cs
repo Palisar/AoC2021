@@ -19,15 +19,40 @@ public class Day8Tests
     }
 
     [Fact]
-    public void Trail()
+    public void Trial()
     {
-        var input= "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab";
+        var input = "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab";
         var data = input.Split(' ').ToArray();
         Dictionary<string, int> unscram = new();
         foreach (var item in data)
         {
             String.Concat(item.OrderBy(x => x));
-            
         }
     }
+    /*
+    acedgfb: 8
+      cdfbe: 5
+      gcdfa: 2
+      fbcad: 3
+      dab: 7
+      cefabd: 9
+      cdfgeb: 6
+      eafb: 4
+      cagedb: 0
+      ab: 1
+        */
+    [Fact]
+    public void CanTranslateInputPatterns()
+    {
+        var input = "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab";
+        var data = input.Split(' ').ToArray();
+
+        var actual = Day_08.DecodePatterns(data);
+
+        actual["abcdefg"].Should().Be(8);
+        actual["ab"].Should().Be(1);
+        actual["abcdef"].Should().Be(9);
+        actual["bcdef"].Should().Be(5);
+    }
+
 }
