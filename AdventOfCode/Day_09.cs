@@ -161,7 +161,7 @@ public class Day_09 : BaseDay
             var current = points.Dequeue();
             if (current.Y != 0)
             {
-                if (point.value < numbers[current.Y - 1, current.X] && numbers[current.Y - 1, current.X] < 9 && !basin.Contains(current))
+                if (point.value < numbers[current.Y - 1, current.X] && numbers[current.Y - 1, current.X] < 9 && !basin.Contains(new Point(current.X, current.Y - 1)))
                 {
                     var nextPoint = new Point(current.X, current.Y - 1);
                     points.Enqueue(nextPoint);
@@ -170,7 +170,7 @@ public class Day_09 : BaseDay
             }
             if (current.Y < numbers.GetLength(0) - 1)
             {
-                if (point.value < numbers[current.Y + 1, current.X] && numbers[current.Y + 1, current.X] < 9 && !basin.Contains(current))
+                if (point.value < numbers[current.Y + 1, current.X] && numbers[current.Y + 1, current.X] < 9 && !basin.Contains(new Point(current.X, current.Y + 1)))
                 {
                     var nextPoint = new Point(current.X, current.Y + 1);
                     points.Enqueue(nextPoint);
@@ -179,7 +179,7 @@ public class Day_09 : BaseDay
             }
             if (current.X != 0)
             {
-                if (point.value < numbers[current.Y, current.X - 1] && numbers[current.Y, current.X - 1] < 9 && !basin.Contains(current))
+                if (point.value < numbers[current.Y, current.X - 1] && numbers[current.Y, current.X - 1] < 9 && !basin.Contains(new Point(current.X - 1, current.Y)))
                 {
                     var nextPoint = new Point(current.X - 1, current.Y);
                     points.Enqueue(nextPoint);
@@ -188,7 +188,7 @@ public class Day_09 : BaseDay
             }
             if (current.X < numbers.GetLength(1) - 1)
             {
-                if (point.value < numbers[current.Y, current.X + 1] && numbers[current.Y, current.X + 1] < 9 && !basin.Contains(current))
+                if (point.value < numbers[current.Y, current.X + 1] && numbers[current.Y, current.X + 1] < 9 && !basin.Contains(new Point(current.X + 1, current.Y)))
                 {
                     var nextPoint = new Point(current.X + 1, current.Y);
                     points.Enqueue(nextPoint);
@@ -198,8 +198,5 @@ public class Day_09 : BaseDay
         }
         return basin.ToList();
     }
-
-
-    public record struct Point(int X, int Y);
-
 }
+public record struct Point(int X, int Y);
